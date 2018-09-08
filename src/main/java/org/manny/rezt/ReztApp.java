@@ -36,7 +36,7 @@ public class ReztApp extends Application<ReztConfiguration> {
 	environment.jersey().register(new AbstractBinder() {
 	    @Override
 	    protected void configure() {
-		bind(new ReztStore("123.456")).to(ReztStore.class);
+		bind(new ReztStore(configuration.getRedisUri())).to(ReztStore.class);
 	    }
 	});
 	environment.jersey().register(new AuthDynamicFeature(

@@ -1,13 +1,14 @@
 package org.manny.rezt.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Base64;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -19,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -63,11 +65,10 @@ public class ReztFile {
 
 	try {
 	    InputStream is = bodyPart.getEntityAs(InputStream.class);
-	    is.available();
 	    index = store.create(user.getId(), is, Optional.empty());
-	} catch (IOException ioe) {
+	} catch (IOException | NoSuchAlgorithmException ex) {
 	    return Response.status(500).entity(
-		    "I/O ERROR: " + ioe.getMessage() + "\r\n").build();
+		    "Internal ERROR: " + ex.getMessage() + "\r\n").build();
 	}
 
 	return Response.ok(index).build();
@@ -78,8 +79,15 @@ public class ReztFile {
     @Path("/dl/{fid: [a-fA-F0-9]+}{jsopt: (/(i|d))?}")
     public Response download(@PathParam("jsopt") String jsopt,
 				 @NotNull @Valid @PathParam("fid") String fid) {
-	ReztObject ro = store.findBySha1(getUser().getId(), fid);
-
-	return Response.ok(ro).build();
+	try {
+	    ReztObject ro = store.findBySha1(getUser().getId(), fid);
+	    return Response.ok(ro).build();
+	} catch (UnsupportedEncodingException uex) {
+	    return Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+		    "Internal ERROR: " + uex.getMessage() + "\r\n").build();
+	} catch (FileNotFoundException fnfex) {
+	    return Response.status(Status.NOT_FOUND).entity(
+		    "File not found: " + fnfex.getMessage() + "\r\n").build();
+	}
     }
 }

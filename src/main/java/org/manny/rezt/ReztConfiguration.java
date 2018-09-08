@@ -11,12 +11,18 @@ public class ReztConfiguration extends Configuration {
     // defaults
     private String resources = "/tmp/rezt/resources/";
     private String signkey = "SECRET-SIGNKEY-REZT";
+    private String redisUri = "redis://localhost/1";
+
+    @JsonProperty
+    public String getRedisUri() {
+	return redisUri;
+    }
 
     @JsonProperty
     public String getSignkey() {
 	return signkey;
     }
-    
+
     @JsonProperty
     public void setSignkey(String signkey) {
 	this.signkey = signkey;
