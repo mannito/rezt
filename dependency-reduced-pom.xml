@@ -118,7 +118,7 @@
           <transformers>
             <transformer />
             <transformer>
-              <mainClass>org.manny.rezt.App</mainClass>
+              <mainClass>org.manny.rezt.ReztApp</mainClass>
             </transformer>
           </transformers>
         </configuration>
@@ -288,4 +288,10 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <properties>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 </project>

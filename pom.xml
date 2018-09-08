@@ -7,7 +7,14 @@
   <version>1.0</version>
   <name>rezt</name>
   <url>http://maven.apache.org</url>
-
+  
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
     <repositories>
         <repository>
             <id>sonatype-nexus-snapshots</id>
@@ -40,6 +47,10 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-hibernate</artifactId>
+        </dependency>
+	<dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-auth</artifactId>
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>
@@ -89,6 +100,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+	<dependency>
+	    <groupId>com.auth0</groupId>
+	    <artifactId>java-jwt</artifactId>
+	    <version>3.4.0</version>
+	</dependency>
     </dependencies>
 
     <build>
@@ -210,7 +226,7 @@
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>org.manny.rezt.App</mainClass>
+                            <mainClass>org.manny.rezt.ReztApp</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>
