@@ -4,6 +4,7 @@ import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.manny.rezt.auth.JWTAuthFilter;
 import org.manny.rezt.auth.JWTAuthenticator;
@@ -32,6 +33,12 @@ public class ReztApp extends Application<ReztConfiguration> {
 	final ReztStatus rstat = new ReztStatus(configuration.getResources());
 	final ReztHealth rhealth = new ReztHealth();
 
+	environment.jersey().register(new AbstractBinder() {
+	    @Override
+	    protected void configure() {
+		bind(new ReztStore("123.456")).to(ReztStore.class);
+	    }
+	});
 	environment.jersey().register(new AuthDynamicFeature(
 		new JWTAuthFilter(new JWTAuthenticator(configuration.getSignkey()))
 	));
