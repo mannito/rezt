@@ -31,7 +31,7 @@ public class ReztStatus {
 
 	if (!new File(resource.orElse(defaultResource)).isDirectory())
 	    code = "ERR";
-	else code = "OK";    
+	else code = "OK";
 
         return new Status(counter.incrementAndGet(), code);
     }

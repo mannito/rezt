@@ -1,5 +1,6 @@
 package org.manny.rezt;
 
+import org.manny.rezt.store.ReztStore;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.setup.Bootstrap;

@@ -14,6 +14,21 @@ public class ReztConfiguration extends Configuration {
     private String redisUri = "redis://localhost/1";
 
     @JsonProperty
+    public void setRedisUri(String redisUri) {
+	this.redisUri = redisUri;
+    }
+
+    @JsonProperty
+    public void setSignkey(String signkey) {
+	this.signkey = signkey;
+    }
+
+    @JsonProperty
+    public void setResources(String resources) {
+	this.resources = resources;
+    }
+
+    @JsonProperty
     public String getRedisUri() {
 	return redisUri;
     }
@@ -24,17 +39,7 @@ public class ReztConfiguration extends Configuration {
     }
 
     @JsonProperty
-    public void setSignkey(String signkey) {
-	this.signkey = signkey;
-    }
-
-    @JsonProperty
     public String getResources() {
 	return resources;
-    }
-
-    @JsonProperty
-    public void setResources(String resources) {
-	this.resources = resources;
     }
 }

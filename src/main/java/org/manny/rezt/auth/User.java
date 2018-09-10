@@ -9,7 +9,7 @@ public class User implements Principal {
 	this.id = id;
 	this.name = name;
     }
-    
+
     public String getId() {
 	return id;
     }

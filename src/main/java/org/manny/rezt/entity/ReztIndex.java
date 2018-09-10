@@ -7,14 +7,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author javier
  */
 public class ReztIndex {
-    private String name, id;
-    private long size, parts;
+    private final long size, birth, contentId;
+    private final String id;
+    private final int parts;
 
-    public ReztIndex(String name, String id, long size, long parts) {
-	this.name = name;
+    public ReztIndex(String id, long size, int parts, long birth, long contentId) {
 	this.id = id;
 	this.size = size;
 	this.parts = parts;
+	this.birth = birth;
+	this.contentId = contentId;
+    }
+
+    @JsonProperty
+    public long getContentId() {
+	return contentId;
+    }
+
+    @JsonProperty
+    public long getBirth() {
+	return birth;
     }
 
     @JsonProperty
@@ -23,12 +35,7 @@ public class ReztIndex {
     }
 
     @JsonProperty
-    public String getName() {
-	return name;
-    }
-
-    @JsonProperty
-    public long getParts() {
+    public int getParts() {
 	return parts;
     }
 

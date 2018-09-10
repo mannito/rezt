@@ -25,7 +25,7 @@ public class JWTAuthenticator implements Authenticator<String, User> {
     public Optional<User> authenticate(String token) throws AuthenticationException {
 	try {
 	    DecodedJWT jwt = verifier.verify(token);
-	    return Optional.of(new User(jwt.getId(), jwt.getSubject()));
+	    return Optional.of(new User(jwt.getClaim("id").asString(), jwt.getSubject()));
 	} catch (JWTVerificationException jve) {
 	    throw new AuthenticationException(
 		    String.format("Invalid JWT: <%s> (%s)", token, jve.getMessage()));

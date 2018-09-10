@@ -1,6 +1,9 @@
 package org.manny.rezt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *
@@ -8,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ReztObject {
     private final ReztIndex index;
-    private final byte content[];
+    private final InputStream stream;
 
-    public ReztObject(ReztIndex index, byte[] content) {
+    public ReztObject(ReztIndex index, InputStream stream) {
 	this.index = index;
-	this.content = content;
+	this.stream = stream;
     }
 
     @JsonProperty(required = true)
@@ -20,8 +23,8 @@ public class ReztObject {
 	return index;
     }
 
-    @JsonProperty(required = true)    
-    public byte[] getContent() {
-	return content;
+    @JsonIgnore
+    public InputStream getContent() throws IOException {
+	return stream;
     }
 }

@@ -32,7 +32,7 @@ public class JWTAuthFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext crc) throws IOException {
 	String header = crc.getHeaderString(HttpHeaders.AUTHORIZATION);
-	
+
 	if (header == null)
 	    throw new WebApplicationException("Invalid Authorization", Status.UNAUTHORIZED);
 
@@ -59,7 +59,9 @@ public class JWTAuthFilter implements ContainerRequestFilter {
 		public String getAuthenticationScheme() { return "Bearer"; }
 	    });
 	} catch (AuthenticationException ae) {
-	    throw new WebApplicationException("Invalid Token: <" + ae.getMessage() + ">", Status.UNAUTHORIZED);
+	    throw new WebApplicationException(
+		    "Invalid Token: <" + ae.getMessage() + ">", Status.UNAUTHORIZED
+	    );
 	}
     }
 }
