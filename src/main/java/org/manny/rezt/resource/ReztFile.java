@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -133,15 +134,28 @@ public class ReztFile {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
     @Path("/dl/name/{name}{out: (/(a|d|h))?}")
-    public Response downloadName(@PathParam("out") String out,
+    public Response downloadName(@PathParam("out") Optional<String> out,
 				@NotNull @Valid @PathParam("name") String name,
 				@QueryParam("tag") Set<String> tags) {
 
 	try {
-
 	    Set<ReztObject> ros = store.loadByName(getUser().getId(), name, tags);
+
+	    if (ros.size() == 1 && out.orElse("").equals("/d"))
+		return Response.ok(ros.iterator().next().getContent(),
+			MediaType.APPLICATION_OCTET_STREAM).build();
+
+	    if (out.orElse("").equals("/h"))
+		return Response.ok(ros.stream().map((t) -> {
+			return t.getIndex();
+		    }).collect(Collectors.toList())).build();
+
+	    if (out.orElse("").matches(".*[dh].*"))
+		return Response.status(Status.NOT_FOUND).entity(
+			"URL not found\r\n").build();
+
 	    return Response.ok(jsonStreamResponse(ros)).build();
 	} catch (IOException ex) {
 
