@@ -1,4 +1,4 @@
-# Project Title
+# Rezt HTTP Store
 
 Initial version.
 
