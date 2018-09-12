@@ -4,7 +4,7 @@
   <groupId>org.manny.rezt</groupId>
   <artifactId>rezt</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>v0.2</version>
   <name>rezt</name>
   <url>http://maven.apache.org</url>
   
