@@ -90,7 +90,6 @@ public class ReztStore {
 		throws IOException, NoSuchAlgorithmException {
 
 	RedisCommands<String, String> attrcmd = commandConnection.sync();
-	RedisCommands<byte[], byte[]> datacmd = dataConnection.sync();
 	ReztIndex index = storeStream(ns, is);
 
 	String tagKey = "tags/" + fileId(ns, index.getId());
@@ -110,7 +109,8 @@ public class ReztStore {
 	if (!tags.isEmpty()) {
 	    attrcmd.sadd(tagKey, tags.toArray(new String[tags.size()]));
 	    for (String t: tags)
-		attrcmd.sadd("tag/" + ns + ":" + Hashing.sha1().hashBytes(t.getBytes("UTF-8")), indexKey);
+		attrcmd.sadd("tag/" + ns + ":" +
+			Hashing.sha1().hashBytes(t.getBytes("UTF-8")), indexKey);
 	}
 
 	attrcmd.sadd(nameKey, indexKey);
@@ -128,7 +128,7 @@ public class ReztStore {
 	int parts = Integer.valueOf(imap.get("parts"));
 	long size = Long.valueOf(imap.get("size"));
 	long cid =  Long.valueOf(imap.get("contentId"));
-	String sha1Loaded =  imap.get("sha1");
+	String sha1Loaded = imap.get("sha1");
 
 	return new ReztIndex(sha1Loaded, size, parts, birth, cid);
     }
