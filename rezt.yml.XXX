@@ -1,0 +1,12 @@
+resources: ./resources/
+signkey: XXX_SIGNKEY_XXX
+redisUri: XXX_REDISURI_XXX
+
+server:
+  applicationConnectors:
+  - type: XXX_APPCONNECTOR_TYPE_XXX
+    port: XXX_APPCONNECTOR_PORT_XXX
+  adminConnectors:
+  - type: XXX_ADMINCONNECTOR_TYPE_XXX
+    port: XXX_ADMINCONNECTOR_PORT_XXX
+
