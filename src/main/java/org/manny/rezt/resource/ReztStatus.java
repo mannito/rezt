@@ -1,38 +1,37 @@
 package org.manny.rezt.resource;
 
 import com.codahale.metrics.annotation.Timed;
-import java.io.File;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.annotation.security.PermitAll;
+import java.io.IOException;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import org.manny.rezt.store.ReztStore;
 import org.manny.rezt.entity.Status;
 
-@PermitAll // XXX: Role ADMIN
 @Path("/status")
 @Produces(MediaType.APPLICATION_JSON)
 public class ReztStatus {
-    private final String defaultResource;
-    private final AtomicLong counter;
+    private final ReztStore store;
 
-    public ReztStatus(String defaultResource) {
-        this.defaultResource = defaultResource;
-        this.counter = new AtomicLong();
+    @Inject
+    public ReztStatus(ReztStore store) {
+        this.store = store;
     }
 
     @GET
     @Timed
-    public Status getStatus(@QueryParam("resource") Optional<String> resource) {
-	final String code;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatus() {
 
-	if (!new File(resource.orElse(defaultResource)).isDirectory())
-	    code = "ERR";
-	else code = "OK";
-
-        return new Status(counter.incrementAndGet(), code);
+	try {
+	    return Response.ok(new Status(0, store.status())).build();
+	} catch (IOException ioe) {
+	    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+		    .entity(new Status(1, "Internal error: " +
+				ioe.getMessage())).build();
+	}
     }
 }

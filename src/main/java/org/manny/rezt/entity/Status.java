@@ -1,20 +1,14 @@
 package org.manny.rezt.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Length;
 
 public class Status {
-    private long id;
+    private final String description;
+    private final int id;
 
-    @Length(max = 3)
-    private String content;
-
-    public Status() {
-    }
-
-    public Status(long id, String content) {
+    public Status(int id, String desc) {
+	this.description = desc;
 	this.id = id;
-	this.content = content;
     }
 
     @JsonProperty
@@ -23,7 +17,7 @@ public class Status {
     }
 
     @JsonProperty
-    public String getContent() {
-	return content;
+    public String getDescription() {
+	return description;
     }
 }

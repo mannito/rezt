@@ -2,7 +2,9 @@ package org.manny.rezt.store;
 
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+import io.lettuce.core.ClientOptions;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisException;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.codec.ByteArrayCodec;
@@ -37,6 +39,11 @@ public class ReztStore {
 
 	this.uri = uri;
 	client = RedisClient.create(uri);
+	client.setOptions(ClientOptions
+		.builder()
+		.autoReconnect(false)
+		.build()
+	);
 	commandConnection = client.connect();
 	dataConnection = client.connect(new ByteArrayCodec());
     }
@@ -174,5 +181,20 @@ public class ReztStore {
 	}
 
 	return result;
+    }
+    
+    public String status() throws IOException {
+	try {
+
+	    if (commandConnection.sync().ping().equals("PONG"))
+		return "Connected";
+
+	    throw new IOException("Connection timeout");
+
+	} catch (RedisException rex) {
+
+	    throw new IOException("Connection error: " +
+		    rex.getMessage(), rex.getCause());
+	}
     }
 }
