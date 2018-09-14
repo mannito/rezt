@@ -8,6 +8,7 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.process.internal.RequestScoped;
 import org.manny.rezt.auth.JWTAuthFilter;
 import org.manny.rezt.auth.JWTAuthenticator;
 import org.manny.rezt.health.ReztHealth;
@@ -47,7 +48,7 @@ public class ReztApp extends Application<ReztConfiguration> {
 		    public void dispose(ReztStore t) {
 			t.close();
 		    }
-		}).to(ReztStore.class);
+		}).to(ReztStore.class).in(RequestScoped.class);
 	    }
 	});
 
