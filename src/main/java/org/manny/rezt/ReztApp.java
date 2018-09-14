@@ -44,7 +44,9 @@ public class ReztApp extends Application<ReztConfiguration> {
 		    }
 
 		    @Override
-		    public void dispose(ReztStore t) { /* nothing */ }
+		    public void dispose(ReztStore t) {
+			t.close();
+		    }
 		}).to(ReztStore.class);
 	    }
 	});

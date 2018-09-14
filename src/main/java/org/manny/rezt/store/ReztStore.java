@@ -197,4 +197,8 @@ public class ReztStore {
 		    rex.getMessage(), rex.getCause());
 	}
     }
+
+    public void close() {
+	client.shutdown();
+    }
 }
